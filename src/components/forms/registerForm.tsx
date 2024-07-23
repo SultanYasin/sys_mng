@@ -15,6 +15,8 @@ import { Doctors, GenderOptions, IdentificationTypes } from "@/app/constans";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
+import { FileUploader } from "../FileUploder";
+
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -124,7 +126,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
 
           {/* EMAIL & PHONE */}
-          <div className="flex flex-col gap-6 xl:flex-row">
+          <div className="flex w-full flex-col gap-6 xl:flex-row" >
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
@@ -322,7 +324,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                 {type}
               </SelectItem>
             ))}
-          </CustomFormField> 
+          </CustomFormField>
 
           <CustomFormField
             fieldType={FormFieldType.INPUT}
@@ -339,7 +341,7 @@ const RegisterForm = ({ user }: { user: User }) => {
             label="Scanned Copy of Identification Document"
             renderSkeleton={(field) => (
               <FormControl>
-             {/*    <FileUploader files={field.value} onChange={field.onChange} /> */}
+                <FileUploader files={field.value} onChange={field.onChange} />
               </FormControl>
             )}
           />

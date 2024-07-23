@@ -24,6 +24,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 
 interface CustomProps {
   control: Control<any>;
@@ -85,9 +87,20 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
             className="input-phone "
-          />
+            />
         </FormControl>
       );
+      case FormFieldType.CHECKBOX:
+        return (<FormControl>
+          <div className="flex item-center gap-4" >
+            <Checkbox 
+            id={props.name}
+            checked={field.value}
+            onCheckedChange={field.onChange}
+            />
+            <Label htmlFor={props.name} className="checkbox.label"> {props.label} </Label>
+             </div>
+        </FormControl>)
     case FormFieldType.SELECT:
       return (
         <FormControl>
@@ -118,7 +131,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400 ">
+        <div className="flex rounded-md border border-dark-500 bg-dark-400">
           <Image
             src="/assets/icons/calendar.svg"
             height={24}
@@ -140,7 +153,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       );
 
     case FormFieldType.SKELETON:
-      return renderSkeleton ? renderSkeleton(field) : null;
+      return props.renderSkeleton ? props.renderSkeleton(field) : null;
 
     default:
       return null;
@@ -154,7 +167,7 @@ export default function CustomFormField(props: CustomProps) {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex- 1">
+        <FormItem className="flex-1">
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
