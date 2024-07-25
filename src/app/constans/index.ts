@@ -1,12 +1,13 @@
-export const GenderOptions = ["Male", "Female", "Other"];
+export const GenderOptions = ["male", "female", "other"];
 
-export const PatientFormDefaultValues = {
+export type Gender = (typeof GenderOptions)[number];
+export const UserFormDefaultValues = {
   firstName: "",
   lastName: "",
   email: "",
   phone: "",
   birthDate: new Date(Date.now()),
-  gender: "Male" as Gender,
+  gender: "male" as Gender,
   address: "",
   occupation: "",
   emergencyContactName: "",
@@ -40,7 +41,7 @@ export const IdentificationTypes = [
   "Voter ID Card",
 ];
 
-export const Doctors = [
+export const Admins = [
   {
     image: "/assets/images/dr-green.png",
     name: "John Green",

@@ -6,12 +6,12 @@ import { Form, FormControl } from "@/components/ui/form";
 import CustomFormField from "./CustomFormField";
 import SubmitButton from "../ui/submitButton";
 import { useState } from "react";
-import { formSchema } from "@/app/lib/Validation";
+import { UserFormValidation } from "@/app/lib/Validation";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/app/lib/actions/user.action";
+import { createUser, registerUser } from "@/app/lib/actions/user.action";
 import { FormFieldType } from "./UserForm";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Doctors, GenderOptions, IdentificationTypes } from "@/app/constans";
+import { Admins, GenderOptions, IdentificationTypes } from "@/app/constans";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
@@ -21,27 +21,21 @@ import { FileUploader } from "../FileUploder";
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-/* 
-  const form = useForm<z.infer<typeof PatientFormValidation>>({
-    resolver: zodResolver(PatientFormValidation),
+ 
+  const form = useForm<z.infer<typeof UserFormValidation>>({
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      ...PatientFormDefaultValues,
+      ...UserFormValidation,
       name: user.name,
       email: user.email,
       phone: user.phone,
     },
   });
-   */
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-        phone: "",
-      },
-    });
 
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+
+    //append more data to the user
+
+  const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
 
     // Store file info in form data as
@@ -60,7 +54,7 @@ const RegisterForm = ({ user }: { user: User }) => {
     }
 
     try {
-      const patient = {
+      const emp = {
         userId: user.$id,
         name: values.name,
         email: values.email,
@@ -85,17 +79,19 @@ const RegisterForm = ({ user }: { user: User }) => {
           : undefined,
         privacyConsent: values.privacyConsent,
       };
+        /* {//TODO: chg variable name} */
+       
+      const newUser = await registerUser(emp);
+      console.log( '#'.repeat(15) ,registerUser(emp));
 
-      const newPatient = await registerPatient(patient);
-
-      if (newPatient) {
-        router.push(`/patients/${user.$id}/new-appointment`);
+      if (newUser) {
+        router.push(`/users/${user.$id}/new-appointment`);
       }
     } catch (error) {
       console.log(error);
     }
 
-    setIsLoading(false);
+    setIsLoading(true);
   };
 
   return (
@@ -224,26 +220,26 @@ const RegisterForm = ({ user }: { user: User }) => {
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Medical Information</h2>
           </div>
-
-          {/* PRIMARY CARE PHYSICIAN */}
+{/* //TODO: */} 
+          {/* todo : PRIMARY ADMIN*/}
           <CustomFormField
             fieldType={FormFieldType.SELECT}
             control={form.control}
-            name="primaryPhysician"
-            label="Primary care physician"
-            placeholder="Select a physician"
+            name="PrimaryAdmin"
+            label="Primary Admin"
+            placeholder="Select an admin"
           >
-            {Doctors.map((doctor, i) => (
-              <SelectItem key={doctor.name + i} value={doctor.name}>
+            {Admins.map((admin, i) => (
+              <SelectItem key={admin.name + i} value={admin.name}>
                 <div className="flex cursor-pointer items-center gap-2">
                   <Image
-                    src={doctor.image}
+                    src={admin.image}
                     width={32}
                     height={32}
-                    alt="doctor"
+                    alt="admin"
                     className="rounded-full border border-dark-500"
                   />
-                  <p>{doctor.name}</p>
+                  <p>{admin.name}</p>
                 </div>
               </SelectItem>
             ))}
@@ -347,7 +343,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
         </section>
 
-        <section className="space-y-6">
+       <section className="space-y-6">
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Consent and Privacy</h2>
           </div>
@@ -356,25 +352,23 @@ const RegisterForm = ({ user }: { user: User }) => {
             fieldType={FormFieldType.CHECKBOX}
             control={form.control}
             name="treatmentConsent"
-            label="I consent to receive treatment for my health condition."
+            label="I consent"
           />
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
             control={form.control}
             name="disclosureConsent"
-            label="I consent to the use and disclosure of my health
-            information for treatment purposes."
+            label="I consent "
           />
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
             control={form.control}
             name="privacyConsent"
-            label="I acknowledge that I have reviewed and agree to the
-            privacy policy"
-          />
-        </section>
+            label="I acknowledge "
+          /> 
+        </section> 
 
         <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
       </form>

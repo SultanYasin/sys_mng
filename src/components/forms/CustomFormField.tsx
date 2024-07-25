@@ -46,15 +46,10 @@ interface CustomProps {
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
   const {
-    fieldType,
-    iconSrc,
-    iconAlt,
-    placeholder,
-    showTimeSelect,
-    dateFormat,
-    renderSkeleton,
+    fieldType,iconSrc,iconAlt,placeholder,showTimeSelect,dateFormat,renderSkeleton,
   } = props;
   switch (props.fieldType) {
+
     case FormFieldType.INPUT:
       return (
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
@@ -76,7 +71,9 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           </FormControl>
         </div>
       );
+
     case FormFieldType.PHONE_INPUT:
+
       return (
         <FormControl>
           <PhoneInput
@@ -90,7 +87,8 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             />
         </FormControl>
       );
-      case FormFieldType.CHECKBOX:
+
+    case FormFieldType.CHECKBOX:
         return (<FormControl>
           <div className="flex item-center gap-4" >
             <Checkbox 
@@ -100,7 +98,8 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             />
             <Label htmlFor={props.name} className="checkbox.label"> {props.label} </Label>
              </div>
-        </FormControl>)
+        </FormControl>
+        )
     case FormFieldType.SELECT:
       return (
         <FormControl>
